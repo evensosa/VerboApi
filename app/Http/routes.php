@@ -11,6 +11,8 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+
+Route::resource('cancionesDetalle','CancionDetalleController',['only' => ['index','show']]);
+Route::resource('canciones','CancionController');
+Route::resource('canciones.detalle','CancionesLetraDetalleController',['except' => ['show']]);

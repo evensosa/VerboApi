@@ -10,7 +10,7 @@ class cancion extends Model{
 	protected $fillable = array('txt_cancion','tono','tempo','link');
 
 	public function cancionDetalles(){
-		$this->hasMany('cancion_detalle')
+		$this->hasMany('cancion_detalle');
 	}
 }
 
