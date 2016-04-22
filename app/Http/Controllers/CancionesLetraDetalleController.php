@@ -47,9 +47,39 @@ class CancionesLetraDetalleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request,$id_cancion)
     {
-        //
+        $letra = $request->input('letra');
+
+        $letra = explode(";",$letra);
+        $consec = 1;
+        $tipo = 2;
+        
+        $column = "id_cancion";
+        cancion_detalle::where($column , '=', $id_cancion)->delete();
+        
+        foreach($letra as $verso){
+            
+            if(strpos($verso,'  ')!==false || strlen($verso) < 5 && strlen($verso) > 0){
+                $tipo = 1;
+            }
+            elseif($verso==""){
+                $tipo = 3;	
+            }
+            else{
+                $tipo = 2;		
+            }
+            
+            cancion_detalle::create(array(  'id_cancion' => $id_cancion,
+                                'id_verso' => $consec,
+                                'txt_verso' => $verso,
+                                'tipo' => 2)    );
+                                
+            $consec++;                                
+        }
+        
+        
+        return "Cancion Guardada!";
     }
 
     /**
@@ -114,8 +144,13 @@ class CancionesLetraDetalleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id_cancion)
     {
-        //
+        
+        $column = "id_cancion";
+        cancion_detalle::where($column , '=', $id_cancion)->delete();
+
+		return response()->json(['mensaje' => 'Letra eliminado'],200);
+        
     }
 }

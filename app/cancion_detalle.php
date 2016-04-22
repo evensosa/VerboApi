@@ -12,6 +12,8 @@ class cancion_detalle extends Model{
 	public function Cancion(){
 		$this->belongsTo('cancion');
 	}
+	
+	
 
 }
 

@@ -37,7 +37,16 @@ class listaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if(!$request->input('txt_lista'))
+		{
+			return response()->json(['mensaje' => 'No se pudieron procesar los valores', 'codigo' => 422],422);
+		}
+        
+        /*creamos una lista y obtenemos su id*/
+		$lista = lista::create($request->all());
+        $id_lista = $lista->id_lista;
+
+        return response()->json(['mensaje' => 'lista insertada!'],201);
     }
 
     /**
@@ -48,7 +57,22 @@ class listaController extends Controller
      */
     public function show($id)
     {
-        //
+        if(is_numeric($id)){
+            $lista = lista::find("$id");
+        }
+        else{
+            if(strtoupper($id) === "LAST"){
+                
+                $lastId =  \DB::table('cat_lista')->max('id_lista');
+                $lista = lista::find($lastId);
+            }
+        }
+        
+        if(!$lista){
+            return response()->json(['mensaje' => 'No se encuentra esa lista','codigo' => 404]);
+        }
+        
+        return response()->json(['datos' => $lista],200);
     }
 
     /**
