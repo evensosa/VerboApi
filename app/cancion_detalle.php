@@ -2,8 +2,9 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class cancion extends Model{
+class cancion_detalle extends Model{
 
+	public $timestamps = false;
 	protected $table = 'cat_cancion_detalle';
 
 	protected $fillable = array('id_cancion','id_verso','txt_verso','tipo');

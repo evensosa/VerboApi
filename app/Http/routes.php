@@ -15,4 +15,6 @@
 
 Route::resource('cancionesDetalle','CancionDetalleController',['only' => ['index','show']]);
 Route::resource('canciones','CancionController');
-Route::resource('canciones.detalle','CancionesLetraDetalleController',['except' => ['show']]);
+Route::resource('canciones.detalle','CancionesLetraDetalleController');
+Route::resource('lista','listaController');
+Route::resource('lista.lista_detalle','listaDetalleController');

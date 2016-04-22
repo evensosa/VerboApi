@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\cancion;
+use App\cancion_detalle;
 
 class CancionController extends Controller
 {
@@ -41,7 +42,20 @@ class CancionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       if(!$request->input('txt_cancion'))
+		{
+			return response()->json(['mensaje' => 'No se pudieron procesar los valores', 'codigo' => 422],422);
+		}
+		$cancion = cancion::create($request->all());
+        
+        $id_cancion = $cancion->id_cancion;
+
+        cancion_detalle::create(array(  'id_cancion' => $id_cancion,
+                                        'id_verso' => 1,
+                                        'txt_verso' => 'Letra Aqui',
+                                        'tipo' => 2)    );
+        
+		return response()->json(['mensaje' => 'Cancion insertada!'],201);
     }
 
     /**
@@ -52,7 +66,16 @@ class CancionController extends Controller
      */
     public function show($id)
     {
-        $cancion = cancion::find($id);
+        
+
+        if(is_numeric($id)){
+            $cancion = cancion::find("$id");
+        }
+        else{
+            $column = 'txt_cancion'; // This is the name of the column you wish to search
+            $cancion = cancion::where($column , 'like', '%'.$id.'%')->get();
+            return $cancion;
+        }
 
         if(!$cancion){
             return response()->json(['mensaje' => 'No se encuentra esa cancion','codigo' => 404]);
@@ -80,7 +103,64 @@ class CancionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $metodo = $request->method();
+        $cancion = cancion::find($id);
+        
+        if(!$cancion){
+            return response()->json(['mensaje' => 'No se encuentra este fabricante', 'codigo' => 404],404);
+        }
+        
+        $txt_cancion = $request->input('txt_cancion');
+        $tono = $request->input('tono');
+        $tempo = $request->input('tempo');
+        $link = $request->input('link');
+        
+        if($metodo === 'PATCH'){
+            
+            $sn_editado = false;
+            
+            if($txt_cancion != null && $txt_cancion != ''){
+                $cancion->txt_cancion = $txt_cancion;
+                $sn_editado = true;
+            }
+            
+            if($tono != null && $tono != ''){
+                $cancion->tono = $tono;
+                $sn_editado = true;
+            }
+            
+            if($tempo != null && $tempo != ''){
+                $cancion->tempo = $tempo;
+                $sn_editado = true;
+            }
+            
+            if($link != null && $link != ''){
+                $cancion->link = $link;
+                $sn_editado = true;
+            }    
+            
+            if($sn_editado){
+                $cancion->save();
+                return response()->json(['mensaje' => 'Cancion editada'],200);
+            }             
+            
+            return response()->json(['mensaje' => 'No se modificó ningun fabricante'],200);                   
+            
+        }
+        
+       if(!$txt_cancion || !$tempo || !$link || !$tono){
+            return response()->json(['mensaje' => 'No se pudieron procesar los valores', 'codigo' => 422],422);
+        }
+        
+        $cancion->txt_cancion = $txt_cancion;
+        $cancion->tono = $tono;
+        $cancion->tempo = $tempo;
+        $cancion->link = $link;
+        
+        $cancion->save();
+        
+        return response()->json(['mensaje' => 'Cancion editada'],200);
+        
     }
 
     /**

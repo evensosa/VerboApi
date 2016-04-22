@@ -4,6 +4,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class cancion extends Model{
 
+	public $timestamps = false;
 	protected $table = 'cat_cancion';
 
 	protected $primaryKey = 'id_cancion';

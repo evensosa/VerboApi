@@ -5,30 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-use App\cancion;
-use App\cancion_detalle;
 
-class CancionesLetraDetalleController extends Controller
+class listaDetalleController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id)
+    public function index()
     {
-        
-        $column = 'id_cancion'; // This is the name of the column you wish to search
-        $cancion_detalle = cancion_detalle::where($column , '=', $id)->get();
-        return $cancion_detalle;
-
-        if(!$cancion_detalle){
-            return response()->json(['mensaje' => 'No se encuentra esa cancion','codigo' => 404]);
-        }
-        
-        return response()->json(['datos' => $cancion_detalle],200);
-        
+        //
     }
 
     /**
@@ -58,31 +45,9 @@ class CancionesLetraDetalleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id,$sn_tonos)
+    public function show($id)
     {
-        $column = 'id_cancion'; // This is the name of the column you wish to search
-        
-        if($sn_tonos == 1){
-            
-                  $cancion_detalle = cancion_detalle::where($column , '=', $id)->get(); 
-                   
-        }
-        else{
-            
-                $cancion_detalle = cancion_detalle::where($column , '=', $id)
-                                            ->where('tipo','<>',1)
-                                            ->get();
-                                                
-        }
-        
-
-       
-
-        if(!$cancion_detalle){
-            return response()->json(['mensaje' => 'No se encuentra esa cancion','codigo' => 404]);
-        }
-        
-        return response()->json(['datos' => $cancion_detalle],200);
+        //
     }
 
     /**
